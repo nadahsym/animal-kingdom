@@ -383,26 +383,16 @@ function Catalog() {
       </div>
 
       {/* Main Container: TV Card + Navigation Arrows */}
-      <div className="flex items-center gap-3 sm:gap-6 w-full max-w-2xl">
-        {/* Left Control */}
-        <button
-          onClick={prev}
-          className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-white shadow-md border-b-4 border-gray-300 hover:border-emerald-500
-            flex items-center justify-center text-emerald-600 hover:bg-emerald-500 hover:text-white
-            transition-all duration-300 active:scale-95 hover:scale-110 active:border-b-0"
-          aria-label="Hewan sebelumnya"
-        >
-          <ChevronLeft size={36} strokeWidth={3.5} />
-        </button>
-
+      <div className="relative w-full max-w-md flex flex-col items-center animate-fade-in">
+        
         {/* Animal Card */}
         <div
-          className={`flex-1 rounded-3xl bg-gradient-to-br ${animal.color} p-2 shadow-2xl transition-all duration-500 transform`}
+          className={`w-full rounded-3xl bg-gradient-to-br ${animal.color} p-2 shadow-2xl transition-all duration-500 transform`}
           key={animal.id}
         >
           <div className="bg-white rounded-2xl overflow-hidden p-3 shadow-inner">
             {/* TV Screen Container */}
-            <div className={`relative h-60 sm:h-80 rounded-xl overflow-hidden bg-gradient-to-br ${animal.color} border-4 border-gray-100 shadow-md`}>
+            <div className={`relative h-52 sm:h-72 rounded-xl overflow-hidden bg-gradient-to-br ${animal.color} border-4 border-gray-100 shadow-md`}>
               <AnimalMedia animal={animal} className="w-full h-full" />
               
               {/* Dot Indicators */}
@@ -411,8 +401,8 @@ function Catalog() {
                   <button
                     key={i}
                     onClick={() => { stopAudio(); setIndex(i); }}
-                    className={`w-2.5 h-2.5 rounded-full transition-all duration-300
-                      ${i === index ? "bg-yellow-400 scale-130 shadow border border-white" : "bg-white/60 hover:bg-white"}`}
+                    className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-all duration-300
+                      ${i === index ? "bg-yellow-400 scale-125 shadow border border-white" : "bg-white/60 hover:bg-white"}`}
                     aria-label={`Ke hewan ${i + 1}`}
                   />
                 ))}
@@ -420,16 +410,16 @@ function Catalog() {
             </div>
 
             {/* Description Area */}
-            <div className="p-4 sm:p-5 text-center">
+            <div className="p-3 sm:p-5 text-center">
               <div className="flex items-center justify-center gap-3 mb-3">
                 <span className="text-3xl sm:text-4xl animate-bounce-slow">{animal.emoji}</span>
-                <h2 className="text-3xl sm:text-4xl font-fredoka font-black text-gray-800 tracking-tight">
+                <h2 className="text-2xl sm:text-3xl font-fredoka font-black text-gray-800 tracking-tight">
                   {animal.nama}
                 </h2>
               </div>
 
               {/* Speech bubble / Fact box */}
-              <div className="relative bg-yellow-50 border-2 border-dashed border-yellow-300 rounded-2xl p-4 mb-5 text-sm sm:text-base font-bold text-gray-700 leading-relaxed shadow-sm">
+              <div className="relative bg-yellow-50 border-2 border-dashed border-yellow-300 rounded-2xl p-4 mb-4 text-xs sm:text-base font-bold text-gray-700 leading-relaxed shadow-sm">
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-yellow-300 text-yellow-900 text-xs font-black px-3 py-0.5 rounded-full uppercase">
                   💡 Tahukah Kamu?
                 </div>
@@ -439,7 +429,7 @@ function Catalog() {
               {/* Sound Action Button */}
               <button
                 onClick={() => playing ? stopAudio() : playAudio(animal.audioUrl)}
-                className={`w-full flex items-center justify-center gap-3 py-4 rounded-2xl font-fredoka font-black text-xl
+                className={`w-full flex items-center justify-center gap-3 py-3.5 sm:py-4 rounded-2xl font-fredoka font-black text-base sm:text-xl
                   transition-all duration-300 active:scale-95 shadow-md active:translate-y-1
                   ${error
                     ? "bg-rose-100 text-rose-600 border-2 border-rose-300"
@@ -449,7 +439,7 @@ function Catalog() {
                   }`}
               >
                 {error ? (
-                  <><XCircle size={24} strokeWidth={2.5} /> Audio belum siap</>
+                  <><XCircle size={20} sm:size={24} strokeWidth={2.5} /> Audio belum siap</>
                 ) : playing ? (
                   <div className="flex items-center gap-2">
                     <span className="flex items-center gap-0.5 mr-2">
@@ -461,23 +451,39 @@ function Catalog() {
                     <span>Hentikan Suara</span>
                   </div>
                 ) : (
-                  <><Volume2 size={24} strokeWidth={2.5} /> Putar Suara {animal.nama}</>
+                  <><Volume2 size={20} sm:size={24} strokeWidth={2.5} /> Putar Suara {animal.nama}</>
                 )}
               </button>
             </div>
           </div>
         </div>
 
-        {/* Right Control */}
-        <button
-          onClick={next}
-          className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-white shadow-md border-b-4 border-gray-300 hover:border-emerald-500
-            flex items-center justify-center text-emerald-600 hover:bg-emerald-500 hover:text-white
-            transition-all duration-300 active:scale-95 hover:scale-110 active:border-b-0"
-          aria-label="Hewan berikutnya"
-        >
-          <ChevronRight size={36} strokeWidth={3.5} />
-        </button>
+        {/* Navigation Controls (Floating Absolute on desktop/tablet, Flex Row underneath on mobile) */}
+        <div className="flex sm:block items-center justify-between w-full mt-4 sm:mt-0 px-4 sm:px-0">
+          {/* Left Control */}
+          <button
+            onClick={prev}
+            className="sm:absolute sm:left-[-75px] md:sm:left-[-85px] sm:top-1/2 sm:-translate-y-1/2
+              w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white shadow-lg border-b-4 border-gray-300 hover:border-emerald-500
+              flex items-center justify-center text-emerald-600 hover:bg-emerald-500 hover:text-white
+              transition-all duration-300 active:scale-95 hover:scale-110 active:border-b-0 z-30"
+            aria-label="Hewan sebelumnya"
+          >
+            <ChevronLeft size={28} sm:size={36} strokeWidth={3.5} />
+          </button>
+
+          {/* Right Control */}
+          <button
+            onClick={next}
+            className="sm:absolute sm:right-[-75px] md:sm:right-[-85px] sm:top-1/2 sm:-translate-y-1/2
+              w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white shadow-lg border-b-4 border-gray-300 hover:border-emerald-500
+              flex items-center justify-center text-emerald-600 hover:bg-emerald-500 hover:text-white
+              transition-all duration-300 active:scale-95 hover:scale-110 active:border-b-0 z-30"
+            aria-label="Hewan berikutnya"
+          >
+            <ChevronRight size={28} sm:size={36} strokeWidth={3.5} />
+          </button>
+        </div>
       </div>
     </div>
   );
